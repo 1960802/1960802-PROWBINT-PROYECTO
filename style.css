@@ -1,0 +1,43 @@
+:root {
+    width: 100%;
+    --blue: #3c94a085;
+    --blue-x:#fffecdd9;
+    --blue-y: #008394;
+    --light: #ffffff;
+}
+
+body{
+    font-family: 'Comfortaa', cursive;
+    font-weight: 300;
+    color: var(--light);
+    overflow: hidden;
+
+}
+
+.bg-blue{
+    background-color: var(--blue)!important;
+}
+
+.bg-bluey{
+    background-color: var(--blue-y);
+}
+
+.bg-bluex{
+    background-color: var(--blue-x);
+}
+
+.bg-blueg{
+    color:rgb(245, 255, 132) !important;
+    text-align: center !important;
+}
+
+  
+
+
+.form-control, .btn{
+    min-height: 3.125rem;
+    line-height:initial;
+
+}
+
+

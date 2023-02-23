@@ -1,0 +1,45 @@
+
+
+:root{
+--primary:#fffecdd9;
+--light: #ffffff;
+--blue:#3c94a085;
+--blue-y: #008394;
+
+}
+
+body{
+    overflow-x: hidden;
+    font-family: 'Comfortaa', cursive;
+    font-weight:300;
+    color:var(--blue-y); 
+         
+
+    
+}
+
+a:hover{
+    text-decoration: none;
+}
+
+
+.bg-primary{
+    background-color: var(--primary) !important;
+  position: fixed;
+}
+
+.bg-bluee{
+color: var(--blue-y)
+}
+#sidebar-container{
+    min-height: 100vh;
+}
+
+#sidebar-container .logo{
+    padding: 2rem 1.25rem;
+}
+
+#sidebar-container .menu{
+    width: 18rem;
+}
+

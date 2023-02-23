@@ -1,0 +1,57 @@
+:root{
+    --primary:#fffecdd9;
+    --light: #ffffff;
+    --blue:#3c94a085;
+    --blue-y: #008394;
+    
+    }
+
+    .bg.white{
+        background-color: var(--light) ;
+    }
+
+    .py-6{
+        padding-top: 6rem;
+        padding-bottom: 6rem;
+    }
+
+    .profile-picture{
+        background-image: url(Luffy.jpg);
+        background-size: cover;
+        width: 3rem;
+        height: 3rem;
+    }
+
+    .profile-picture2{
+        background-image: url(poesia.jpg);
+        background-size: cover;
+        width: 3rem;
+        height: 3rem;
+    }
+
+    .profile-picture3{
+        background-image: url(walker.jpg);
+        background-size: cover;
+        width: 3rem;
+        height: 3rem;
+    }
+
+
+.tamaño{
+  font-size: 16px;
+}
+
+.letra{
+    font-family: 'Satisfy', cursive;
+    font-size: 30px;
+    color: #e8e829;
+}
+
+.back{
+    background-image: url(fondo.png);
+    background-attachment: fixed;
+}
+
+.static{
+    position: fixed;
+}
