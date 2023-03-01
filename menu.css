@@ -26,6 +26,7 @@ a:hover{
 .bg-primary{
     background-color: var(--primary) !important;
   position: fixed;
+  opacity: 100;
 }
 
 .bg-bluee{
