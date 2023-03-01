@@ -36,6 +36,14 @@
         height: 3rem;
     }
 
+    .profile-picture4{
+        background-image: url(walker.jpg);
+        background-size: cover;
+    margin-left: 220px;
+        width: 10rem;
+        height: 10rem;
+    }
+
 
 .tamaño{
   font-size: 16px;
@@ -83,7 +91,7 @@
 
 .banner{
     background-image: url(fondo.png);
-
+    background-attachment: fixed;
 }
 
 .uno{
