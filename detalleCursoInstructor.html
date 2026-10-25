@@ -1,0 +1,511 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;500;700&family=Satisfy&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/ffec4ec2ed.js" crossorigin="anonymous"></script>
+    <link href="https://unpkg.com/ionicons@4.5.10-0/dist/css/ionicons.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="menu.css">
+    <link rel="stylesheet" href="tablero.css">
+    <link rel="stylesheet" href="style.css">
+    <title>WhiteArt - Gestión del Curso (Instructor)</title>
+
+    <style>
+      body {
+        overflow-x: hidden;
+        margin: 0;
+        padding: 0;
+        font-family: 'Comfortaa', cursive, sans-serif;
+      }
+
+      .navbar-mobile-header {
+        background-color: #ffffff !important;
+        border-bottom: 2px solid #fffecd;
+        height: 62px;
+        position: sticky;
+        top: 0;
+        z-index: 1045;
+      }
+
+      .btn-menu-amarillo {
+        background-color: #fffecd !important;
+        color: #008394 !important;
+        border: 1.5px solid #d4d399 !important;
+        border-radius: 20px !important;
+        padding: 6px 14px !important;
+        font-size: 0.85rem !important;
+        font-weight: bold !important;
+        min-height: auto !important;
+        display: inline-flex;
+        align-items: center;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+      }
+
+      .logo-mobile {
+        height: 38px;
+        width: auto;
+        max-width: 140px;
+        object-fit: contain;
+      }
+
+      @media (min-width: 992px) {
+        #sidebar-container {
+          width: 260px !important;
+          min-width: 260px !important;
+          position: sticky;
+          top: 0;
+          height: 100vh;
+          overflow-y: auto;
+        }
+        .btn-close-sidebar {
+          display: none !important;
+        }
+      }
+
+      @media (max-width: 991.98px) {
+        #sidebar-container {
+          position: fixed !important;
+          top: 0 !important;
+          left: 0 !important;
+          width: 280px !important;
+          max-width: 82% !important;
+          height: 100vh !important;
+          z-index: 1060 !important;
+          overflow-y: auto !important;
+          background-color: #fffecd !important;
+          transform: translateX(-100%) !important;
+          transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+          box-shadow: none;
+        }
+
+        #sidebar-container.active-mobile {
+          transform: translateX(0) !important;
+          box-shadow: 5px 0 20px rgba(0, 0, 0, 0.3) !important;
+        }
+      }
+
+      #sidebar-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: rgba(0, 0, 0, 0.45);
+        z-index: 1055;
+        backdrop-filter: blur(2px);
+      }
+      #sidebar-overlay.active {
+        display: block;
+      }
+
+      /* Tarjeta de información del maestro */
+      .teacher-profile-card {
+        background: #eef2ff;
+        border: 1.5px solid #dbeafe;
+        border-radius: 24px;
+        padding: 30px 20px;
+        box-shadow: 0 8px 20px rgba(37, 99, 235, 0.06);
+      }
+
+      .teacher-big-avatar {
+        width: 130px;
+        height: 130px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 4px solid #ffffff;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      }
+
+      .custom-icon-img {
+        width: 18px;
+        height: 18px;
+        object-fit: contain;
+        vertical-align: middle;
+      }
+
+      .badge-interactive {
+        cursor: pointer;
+        transition: all 0.2s ease;
+        border: none;
+      }
+      .badge-interactive:hover {
+        transform: scale(1.05);
+        opacity: 0.9;
+      }
+
+      .btn-action-icon {
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        border: 1px solid #ced4da;
+        background-color: #ffffff;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        padding: 0;
+      }
+      .btn-action-icon:hover {
+        background-color: #f8f9fa;
+      }
+      .btn-action-icon img {
+        width: 20px;
+        height: 20px;
+        object-fit: contain;
+        transition: transform 0.2s ease;
+      }
+
+      .comment-user-avatar {
+        width: 45px !important;
+        height: 45px !important;
+        min-width: 45px !important;
+        min-height: 45px !important;
+        border-radius: 50% !important;
+        object-fit: cover !important;
+        border: 1.5px solid #008394;
+      }
+
+      .level-box-card {
+        background: #ffffff;
+        border: 1.5px solid #e2e8f0;
+        border-radius: 16px;
+        padding: 20px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+      }
+
+      .btn-editar-nivel {
+        background-color: #2563eb;
+        color: #ffffff;
+        border-radius: 50rem;
+        padding: 8px 22px;
+        font-weight: 600;
+        font-size: 0.85rem;
+        border: none;
+        transition: background 0.2s;
+        text-decoration: none;
+        display: inline-block;
+      }
+      .btn-editar-nivel:hover {
+        background-color: #1d4ed8;
+        color: #ffffff;
+        text-decoration: none;
+      }
+
+      #toast-notificacion {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 9999;
+        min-width: 280px;
+        max-width: 360px;
+        background-color: #ffffff;
+        border-left: 5px solid #008394;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+        border-radius: 8px;
+        padding: 12px 16px;
+        display: none;
+        opacity: 0;
+        transition: opacity 0.3s ease-in-out;
+      }
+      #toast-notificacion.show {
+        display: block;
+        opacity: 1;
+      }
+    </style>
+  </head>
+  <body class="back">
+
+    <!-- TOAST NOTIFICACIÓN -->
+    <div id="toast-notificacion" class="shadow-sm">
+      <div class="d-flex align-items-center justify-content-between">
+        <div class="d-flex align-items-center">
+          <i class="fa fa-info-circle text-info fa-lg mr-2"></i>
+          <div>
+            <h6 class="mb-0 font-weight-bold" style="color: #008394; font-size: 0.9rem;">WhiteArt</h6>
+            <small class="text-dark" id="toast-mensaje" style="font-size: 0.82rem;">Notificación</small>
+          </div>
+        </div>
+        <button type="button" class="close ml-3 p-0 bg-transparent border-0" onclick="ocultarToast()" style="font-size: 1.2rem;">&times;</button>
+      </div>
+    </div>
+
+    <div id="sidebar-overlay"></div>
+
+    <header class="navbar-mobile-header d-flex justify-content-between align-items-center d-lg-none px-3 shadow-sm">
+      <button class="btn btn-menu-amarillo" type="button" id="btnToggleSidebar">
+        <i class="fa fa-bars mr-2"></i>
+        <span>Menú</span>
+      </button>
+      <img src="WhiteArt.png" class="logo-mobile" alt="WhiteArt">
+    </header>
+
+    <div class="d-flex flex-column flex-lg-row min-vh-100 pb-5">
+        
+        <!-- MENÚ LATERAL AMARILLO (INSTRUCTOR) -->
+        <aside id="sidebar-container" class="bg-primary flex-shrink-0">
+            <div class="d-flex justify-content-end p-2 d-lg-none">
+              <button type="button" class="btn text-dark border-0 bg-transparent btn-close-sidebar" id="btnCloseSidebar" style="min-height: auto; font-size: 1.2rem;">
+                <i class="fa fa-times"></i>
+              </button>
+            </div>
+
+            <div class="logo menu text-center py-2 py-lg-4">
+                <img src="WhiteArtAmarillo.png" class="img-fluid" width="130" height="130" alt="WhiteArt">
+            </div>
+            
+            <div class="menu px-3">
+                <a href="DashboardInstructor.html" class="d-block p-3 bg-bluee active"><i class="icon ion-md-book mr-3 lead"></i>Cursos</a>
+                <a href="mensajesInstructor.html" class="d-block p-3 bg-bluee"><i class="icon ion-md-chatbubbles mr-3 lead"></i>Mensajes</a>
+                <a href="kardexInstructor.html" class="d-block p-3 bg-bluee"><i class="icon ion-md-school mr-3 lead"></i>Kardex</a>
+                <a href="ventas.html" class="d-block p-3 bg-bluee"><i class="icon ion-md-cash mr-3 lead"></i>Ventas</a>
+                <a href="perfilInstructor.html" class="d-block p-3 bg-bluee"><i class="icon ion-md-person mr-3 lead"></i>Perfil</a>
+                <a href="#" class="d-block p-3 bg-bluee text-danger" data-toggle="modal" data-target="#modalCerrarSesion"><i class="icon ion-md-power mr-3 lead"></i>Cerrar sesión</a>
+            </div>
+        </aside>
+
+        <!-- CONTENIDO PRINCIPAL: GESTIÓN DE CURSO DEL INSTRUCTOR -->
+        <main class="flex-grow-1 p-2 p-sm-3 p-md-4">
+          <div class="container-fluid" style="max-width: 800px;">
+            
+            <!-- Botón para regresar al Tablero de Instructor -->
+            <div class="mb-3">
+              <a href="DashboardInstructor.html" class="btn btn-sm btn-light border rounded-pill px-3 font-weight-bold" style="color: #2563eb;">
+                <i class="fa fa-arrow-left mr-1"></i> Volver al Tablero
+              </a>
+            </div>
+
+            <h3 class="text-center font-weight-bold mb-4" style="color: #2563eb;">Gestión de Mi Curso</h3>
+
+            <!-- TARJETA CENTRAL DEL MAESTRO -->
+            <div class="teacher-profile-card text-center mb-4">
+              <div class="mb-3">
+                <img src="Mestro animacion.jpg" class="teacher-big-avatar" alt="Mateo Morales">
+              </div>
+
+              <div class="bg-white p-3 rounded-pill shadow-sm mx-auto mb-3" style="max-width: 400px; border: 1px solid #bfdbfe;">
+                <h5 class="font-weight-bold mb-0" style="color: #2563eb; font-size: 1.05rem;">Mateo Morales Cantú</h5>
+                <small class="text-muted font-weight-bold" style="font-size: 0.75rem;">CURSO ANIMACION 2D Y 3D</small>
+              </div>
+
+              <!-- ESTADÍSTICAS DEL CURSO -->
+              <div class="d-flex justify-content-center align-items-center gap-3 mb-3 flex-wrap">
+                <span class="badge badge-warning px-3 py-2 text-dark font-weight-bold mr-2">
+                  <img src="calificacion.png" class="custom-icon-img mr-1" alt="Calificación"> 5.0 Calificación
+                </span>
+
+                <button class="badge badge-light border px-3 py-2 text-muted font-weight-bold mr-2 badge-interactive" data-toggle="modal" data-target="#modalComentarios" title="Ver opiniones de alumnos">
+                  <img src="comentario.png" class="custom-icon-img mr-1" alt="Comentarios"> <span id="totalComentarios">40</span> Opiniones de Alumnos
+                </button>
+
+                <span class="badge badge-primary px-3 py-2 font-weight-bold">
+                  <img src="curso.png" class="custom-icon-img mr-1" style="filter: brightness(0) invert(1);" alt="Niveles"> 2 NIVELES CREADOS
+                </span>
+              </div>
+            </div>
+
+            <!-- SECCIÓN DE PERFIL -->
+            <div class="mb-4 bg-white p-4 rounded shadow-sm border">
+              <h6 class="font-weight-bold text-primary mb-2" style="font-size: 0.9rem;">DESCRIPCIÓN GENERAL</h6>
+              <p class="text-muted small mb-0" style="line-height: 1.5;">
+                Me encanta la animación 2D, 3D y poder ayudar a nuevos artistas a descubrir las grandes obras que pueden llegar hacer mediante técnicas profesionales y prácticas guiadas paso a paso.
+              </p>
+            </div>
+
+            <!-- SECCIÓN DE NIVELES / FASES DEL CURSO (CON OPCIÓN DE EDITAR) -->
+            <div class="mb-4">
+              <h4 class="font-weight-bold text-dark mb-3" style="font-size: 1.1rem;">Fases y Niveles Administrados</h4>
+
+              <!-- NIVEL 1: ANIMACIÓN 2D -->
+              <div class="level-box-card mb-3">
+                <p class="text-muted small font-weight-bold mb-2">NIVEL 1: ARTE 2D</p>
+                <div class="text-center mb-3">
+                  <img src="2d animacion.gif" class="img-fluid rounded shadow-sm" style="max-height: 240px; width: 100%; object-fit: cover;" alt="Animación 2D">
+                </div>
+                <div class="d-flex align-items-center justify-content-between flex-wrap bg-light p-3 rounded-pill border">
+                  <div>
+                    <h5 class="font-weight-bold mb-0" style="color: #2563eb; font-size: 0.95rem;">CURSO 1 ANIMACION 2D</h5>
+                    <small class="text-success font-weight-bold">GRATIS</small>
+                  </div>
+                  <div>
+                    <a href="editarCurso.html" class="btn-editar-nivel shadow-sm">
+                      <i class="fa fa-edit mr-1"></i> Editar Nivel
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              <!-- NIVEL 2: ANIMACIÓN 3D -->
+              <div class="level-box-card mb-3">
+                <p class="text-muted small font-weight-bold mb-2">NIVEL 2: ARTE 3D</p>
+                <div class="text-center mb-3 bg-light p-2 rounded">
+                  <img src="animacion 3d.png" class="img-fluid rounded shadow-sm" style="max-height: 220px; width: 100%; object-fit: cover;" alt="Animación 3D">
+                </div>
+                <div class="d-flex align-items-center justify-content-between flex-wrap bg-light p-3 rounded-pill border">
+                  <div>
+                    <h5 class="font-weight-bold mb-0" style="color: #2563eb; font-size: 0.95rem;">CURSO 2 ANIMACION 3D</h5>
+                    <small class="text-primary font-weight-bold">$100 MXN</small>
+                  </div>
+                  <div>
+                    <a href="editarCurso.html" class="btn-editar-nivel shadow-sm">
+                      <i class="fa fa-edit mr-1"></i> Editar Nivel
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- BOTÓN FINAL DE ACCIÓN -->
+            <div class="text-center pb-4">
+              <a href="kardexInstructor.html" class="btn btn-outline-primary rounded-pill px-4 font-weight-bold">
+                <i class="fa fa-graduation-cap mr-1"></i> Ver Kardex de Alumnos
+              </a>
+            </div>
+
+          </div>
+        </main>
+        
+    </div>
+
+    <!-- MODAL PARA COMENTARIOS DE ALUMNOS -->
+    <div class="modal fade" id="modalComentarios" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content border-0 shadow-lg rounded">
+          <div class="modal-header py-3 px-4 border-bottom">
+            <h5 class="modal-title font-weight-bold text-primary mb-0" style="font-size: 1.15rem;">
+              <i class="fa fa-comments text-info mr-2"></i>Opiniones y Dudas de los Alumnos
+            </h5>
+            <button type="button" class="close text-muted border-0 bg-transparent p-0 m-0" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body p-4" style="max-height: 420px; overflow-y: auto;">
+            
+            <div id="listaComentarios">
+              <div class="d-flex align-items-start mb-3 pb-3 border-bottom">
+                <img src="anne.jpg" class="comment-user-avatar mr-3 shadow-sm" alt="Anne Jimenez">
+                <div class="flex-grow-1">
+                  <div class="d-flex justify-content-between align-items-center w-100 mb-1">
+                    <h6 class="font-weight-bold mb-0" style="font-size: 0.9rem; color: #008394;">Anne Jimenez</h6>
+                    <div class="d-flex align-items-center">
+                      <small class="text-muted mr-2" style="font-size: 0.75rem;">Hace 2 días</small>
+                      <div class="dropdown">
+                        <button class="btn btn-sm p-0 bg-transparent border-0" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="outline: none;">
+                          <img src="puntos.png" alt="Opciones" style="width: 16px; height: 16px; object-fit: contain;">
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-right shadow-sm border-0" style="font-size: 0.8rem;">
+                          <a class="dropdown-item py-1 text-danger" href="#" onclick="reportarComentario(this)">
+                            <i class="fa fa-flag mr-1"></i> Reportar Comentario
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <p class="text-dark small mb-0 bg-light p-2 rounded border">¡Me encantaron las explicaciones del maestro Mateo! Súper recomendado para aprender desde cero.</p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL CERRAR SESIÓN -->
+    <div class="modal fade" id="modalCerrarSesion" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content border-0 shadow-lg rounded" style="background-color: #ffffff !important; overflow: hidden;">
+          <div class="modal-header py-3 px-4 border-bottom d-flex align-items-center justify-content-between" style="background-color: #ffffff !important;">
+            <h5 class="modal-title font-weight-bold text-danger mb-0" style="font-size: 1.15rem;">
+              <icon class="icon ion-md-power mr-2"></icon>Cerrar Sesión
+            </h5>
+            <button type="button" class="close text-muted border-0 bg-transparent p-0 m-0" data-dismiss="modal" aria-label="Close" style="font-size: 1.4rem; line-height: 1; outline: none;">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body p-4 text-center" style="background-color: #ffffff !important;">
+            <p class="mb-2 text-dark" style="font-size: 0.95rem;">¿Estás segur@ de que deseas cerrar sesión en <strong>WhiteArt</strong>?</p>
+            <small class="text-muted d-block">Tendrás que ingresar nuevamente para acceder a tu tablero.</small>
+          </div>
+          <div class="modal-footer py-3 px-4 border-top bg-light justify-content-center">
+            <button type="button" class="btn btn-secondary rounded-pill px-4" data-dismiss="modal" style="min-height: auto; font-size: 0.88rem;">Cancelar</button>
+            <a href="index.html" class="btn btn-danger rounded-pill px-4" style="min-height: auto; font-size: 0.88rem; line-height: 1.8;">Sí, cerrar sesión</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer class="py-1 mt-4" style="background-color: #fffecdd9;">
+        <div class="text-center">
+            <small>&copy; 2026 <b>WhiteArt</b> - Todos los Derechos Reservados.</small>
+        </div>
+    </footer>
+
+    <script>
+      const sidebar = document.getElementById('sidebar-container');
+      const overlay = document.getElementById('sidebar-overlay');
+      const btnToggle = document.getElementById('btnToggleSidebar');
+      const btnClose = document.getElementById('btnCloseSidebar');
+
+      function abrirMenu() {
+        sidebar.classList.add('active-mobile');
+        overlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function cerrarMenu() {
+        sidebar.classList.remove('active-mobile');
+        overlay.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+
+      if (btnToggle) btnToggle.addEventListener('click', abrirMenu);
+      if (btnClose) btnClose.addEventListener('click', cerrarMenu);
+      if (overlay) overlay.addEventListener('click', cerrarMenu);
+
+      function reportarComentario(link) {
+        link.classList.add('disabled');
+        link.innerHTML = '<i class="fa fa-check mr-1"></i> Reportado';
+        link.style.pointerEvents = 'none';
+        mostrarToast('Comentario reportado al administrador con éxito', 'success');
+      }
+
+      let toastTimer;
+      function mostrarToast(mensaje, tipo = 'info') {
+        const toast = document.getElementById('toast-notificacion');
+        const spanMensaje = document.getElementById('toast-mensaje');
+        const icon = document.getElementById('toast-icon');
+        
+        spanMensaje.innerText = mensaje;
+        if (tipo === 'success') {
+          icon.className = 'fa fa-check-circle text-success fa-lg mr-2';
+        } else {
+          icon.className = 'fa fa-bookmark text-warning fa-lg mr-2';
+        }
+        
+        toast.classList.add('show');
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => {
+          ocultarToast();
+        }, 3500);
+      }
+
+      function ocultarToast() {
+        const toast = document.getElementById('toast-notificacion');
+        toast.classList.remove('show');
+      }
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  </body>
+</html>

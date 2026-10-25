@@ -1,0 +1,222 @@
+{
+	"info": {
+		"name": "WhiteArt API - Segunda Entrega",
+		"description": "Coleccion sincronizada con el contrato. Incluye Auth, Perfil, Publicaciones, Categorias, Admin, PayPal (API de terceros).",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Registro",
+					"request": {
+						"method": "POST",
+						"header": [
+							{"key": "Content-Type", "value": "application/json"}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nombre\": \"Juan\",\n  \"apellido\": \"Perez\",\n  \"email\": \"juan.perez@test.com\",\n  \"password\": \"Passw0rd!\",\n  \"password_confirmacion\": \"Passw0rd!\",\n  \"rol\": \"estudiante\"\n}"
+						},
+						"url": {"raw": "{{BASE_URL}}/api/auth/registro", "host": ["{{BASE_URL}}"], "path": ["api", "auth", "registro"]}
+					}
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{"key": "Content-Type", "value": "application/json"}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"juan.perez@test.com\",\n  \"password\": \"Passw0rd!\"\n}"
+						},
+						"url": {"raw": "{{BASE_URL}}/api/auth/login", "host": ["{{BASE_URL}}"], "path": ["api", "auth", "login"]}
+					}
+				},
+				{
+					"name": "Yo (sesion activa)",
+					"request": {
+						"method": "GET",
+						"url": {"raw": "{{BASE_URL}}/api/auth/yo", "host": ["{{BASE_URL}}"], "path": ["api", "auth", "yo"]}
+					}
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"method": "POST",
+						"url": {"raw": "{{BASE_URL}}/api/auth/logout", "host": ["{{BASE_URL}}"], "path": ["api", "auth", "logout"]}
+					}
+				}
+			]
+		},
+		{
+			"name": "Perfil",
+			"item": [
+				{
+					"name": "Ver perfil",
+					"request": {
+						"method": "GET",
+						"url": {"raw": "{{BASE_URL}}/api/perfil", "host": ["{{BASE_URL}}"], "path": ["api", "perfil"]}
+					}
+				},
+				{
+					"name": "Actualizar perfil (JSON)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{"key": "Content-Type", "value": "application/json"}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nombre\": \"Juan Carlos\",\n  \"biografia\": \"Artista digital\"\n}"
+						},
+						"url": {"raw": "{{BASE_URL}}/api/perfil/actualizar", "host": ["{{BASE_URL}}"], "path": ["api", "perfil", "actualizar"]}
+					}
+				}
+			]
+		},
+		{
+			"name": "Publicaciones",
+			"item": [
+				{
+					"name": "Feed publico",
+					"request": {
+						"method": "GET",
+						"url": {"raw": "{{BASE_URL}}/api/publicaciones/feed", "host": ["{{BASE_URL}}"], "path": ["api", "publicaciones", "feed"]}
+					}
+				},
+				{
+					"name": "Mis publicaciones",
+					"request": {
+						"method": "GET",
+						"url": {"raw": "{{BASE_URL}}/api/publicaciones/mis", "host": ["{{BASE_URL}}"], "path": ["api", "publicaciones", "mis"]}
+					}
+				},
+				{
+					"name": "Buscar publicaciones",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{BASE_URL}}/api/publicaciones/buscar?q=arte",
+							"host": ["{{BASE_URL}}"],
+							"path": ["api", "publicaciones", "buscar"],
+							"query": [{"key": "q", "value": "arte"}]
+						}
+					}
+				},
+				{
+					"name": "Crear publicacion (FormData)",
+					"request": {
+						"method": "POST",
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{"key": "titulo", "value": "Mi primer dibujo", "type": "text"},
+								{"key": "descripcion", "value": "Creado con amor", "type": "text"},
+								{"key": "categoria_id", "value": "1", "type": "text"},
+								{"key": "es_publico", "value": "1", "type": "text"},
+								{"key": "imagen", "type": "file", "src": []}
+							]
+						},
+						"url": {"raw": "{{BASE_URL}}/api/publicaciones/crear", "host": ["{{BASE_URL}}"], "path": ["api", "publicaciones", "crear"]}
+					}
+				}
+			]
+		},
+		{
+			"name": "Categorias",
+			"item": [
+				{
+					"name": "Listar categorias",
+					"request": {
+						"method": "GET",
+						"url": {"raw": "{{BASE_URL}}/api/categorias", "host": ["{{BASE_URL}}"], "path": ["api", "categorias"]}
+					}
+				}
+			]
+		},
+		{
+			"name": "PayPal (API de terceros)",
+			"item": [
+				{
+					"name": "Crear orden",
+					"request": {
+						"method": "POST",
+						"header": [
+							{"key": "Content-Type", "value": "application/json"}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"monto\": 9.99,\n  \"curso\": \"Curso de Arte Digital\"\n}"
+						},
+						"url": {"raw": "{{BASE_URL}}/api/paypal/crear-orden", "host": ["{{BASE_URL}}"], "path": ["api", "paypal", "crear-orden"]}
+					}
+				},
+				{
+					"name": "Capturar orden",
+					"request": {
+						"method": "POST",
+						"header": [
+							{"key": "Content-Type", "value": "application/json"}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"orderID\": \"DEMO-XXXXXXXX\"\n}"
+						},
+						"url": {"raw": "{{BASE_URL}}/api/paypal/capturar", "host": ["{{BASE_URL}}"], "path": ["api", "paypal", "capturar"]}
+					}
+				}
+			]
+		},
+		{
+			"name": "Admin (solo administrador)",
+			"item": [
+				{
+					"name": "Listar usuarios",
+					"request": {
+						"method": "GET",
+						"url": {"raw": "{{BASE_URL}}/api/admin/usuarios", "host": ["{{BASE_URL}}"], "path": ["api", "admin", "usuarios"]}
+					}
+				},
+				{
+					"name": "Bloquear/Activar usuario",
+					"request": {
+						"method": "POST",
+						"header": [
+							{"key": "Content-Type", "value": "application/json"}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"usuario_id\": 2,\n  \"activo\": 0\n}"
+						},
+						"url": {"raw": "{{BASE_URL}}/api/admin/usuarios/bloquear", "host": ["{{BASE_URL}}"], "path": ["api", "admin", "usuarios", "bloquear"]}
+					}
+				},
+				{
+					"name": "Crear categoria",
+					"request": {
+						"method": "POST",
+						"header": [
+							{"key": "Content-Type", "value": "application/json"}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nombre\": \"Escultura\",\n  \"descripcion\": \"Obras tridimensionales\"\n}"
+						},
+						"url": {"raw": "{{BASE_URL}}/api/admin/categorias", "host": ["{{BASE_URL}}"], "path": ["api", "admin", "categorias"]}
+					}
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "BASE_URL",
+			"value": "http://localhost:8080",
+			"type": "string"
+		}
+	]
+}

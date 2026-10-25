@@ -1,53 +1,48 @@
-.container-1{
-    width: 300px;
-    vertical-align: middle;
-    white-space: nowrap;
-    position: relative;
+.container-1 {
+  width: 100%;
+  max-width: 480px;
+  position: relative;
+  margin: 0 auto;
+}
 
-    margin-top: auto;
+/* Input fluido y adaptativo */
+.container-1 input#search {
+  width: 100%;
+  height: 46px;
+  background-color: #fffecdd9;
+  border: 1.5px solid #e0dfa3;
+  border-radius: 25px;
+  font-size: 0.92rem;
+  color: #212529;
+  padding-left: 46px;
+  padding-right: 18px;
+  transition: all 0.25s ease-in-out;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.04);
+}
 
-    
-  }
+/* Estados al interactuar */
+.container-1 input#search:hover,
+.container-1 input#search:focus {
+  outline: none;
+  background-color: #ffffff;
+  border-color: #008394;
+  box-shadow: 0 0 0 0.2rem rgba(0, 131, 148, 0.2);
+}
 
+/* Placeholders legibles */
+.container-1 input#search::placeholder {
+  color: #6c757d;
+  opacity: 0.85;
+}
 
-  .container-1 input#search{
-    width: 300px;
-    height: 50px;
-    background: #2b768b;
-    border: none;
-    font-size: 10pt;
-    float: left;
-    color: #002c57;
-    padding-left: 45px;
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    border-radius: 5px;
-  }
-
-  .container-1 input#search::-webkit-input-placeholder {
-    color: #00335a;
- }
- .container-1 input#search:-moz-placeholder { /* Firefox 18- */
-    color: #00335a;  
- }
- .container-1 input#search::-moz-placeholder {  /* Firefox 19+ */
-    color: #00335a;  
- }
- .container-1 input#search:-ms-input-placeholder {  
-    color: #00335a;  
- }
-
- .container-1 .icon{
-    position: absolute;
-    top: 50%;
-    margin-left: 17px;
-    margin-top: 17px;
-    z-index: 1;
-    color: #bebe00;
-  }
-
-  .container-1 input#search:hover, .container-1 input#search:focus, .container-1 input#search:active{
-    outline:none;
-    background: #ffffff;
-  }
-
+/* Icono de búsqueda centrado verticalmente */
+.container-1 .icon {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 5;
+  color: #008394;
+  pointer-events: none;
+  font-size: 1rem;
+}

@@ -1,43 +1,38 @@
 :root {
     width: 100%;
     --blue: #3c94a085;
-    --blue-x:#fffecdd9;
+    --blue-x: #fffecdd9;
     --blue-y: #008394;
     --light: #ffffff;
 }
 
-body{
+body {
     font-family: 'Comfortaa', cursive;
     font-weight: 300;
     color: var(--light);
-    overflow: hidden;
-
+    overflow-x: hidden; /* Corregido: solo bloquea scroll horizontal, permite scroll vertical */
 }
 
-.bg-blue{
-    background-color: var(--blue)!important;
+.bg-blue {
+    background-color: var(--blue) !important;
 }
 
-.bg-bluey{
+.bg-bluey {
     background-color: var(--blue-y);
 }
 
-.bg-bluex{
+.bg-bluex {
     background-color: var(--blue-x);
 }
 
-.bg-blueg{
-    color:rgb(245, 255, 132) !important;
+.bg-blueg {
+    color: rgb(245, 255, 132) !important;
     text-align: center !important;
 }
 
-  
-
-
-.form-control, .btn{
+/* Solo afecta a los formularios grandes de login/registro, no a barras ni botones pequeños */
+form .form-control, 
+form button[type="submit"] {
     min-height: 3.125rem;
-    line-height:initial;
-
+    line-height: initial;
 }
-
-

@@ -1,0 +1,437 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;500;700&family=Satisfy&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/ffec4ec2ed.js" crossorigin="anonymous"></script>
+    <link href="https://unpkg.com/ionicons@4.5.10-0/dist/css/ionicons.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="menu.css">
+    <link rel="stylesheet" href="tablero.css">
+    <link rel="stylesheet" href="style.css">
+
+    <title>WhiteArt / Kardex del Instructor (Generación de Diplomas)</title>
+
+    <style>
+      body {
+        overflow-x: hidden;
+        margin: 0;
+        padding: 0;
+        font-family: 'Comfortaa', cursive, sans-serif;
+      }
+
+      .navbar-mobile-header {
+        background-color: #ffffff !important;
+        border-bottom: 2px solid #fffecd;
+        height: 62px;
+        position: sticky;
+        top: 0;
+        z-index: 1045;
+      }
+
+      .btn-menu-amarillo {
+        background-color: #fffecd !important;
+        color: #008394 !important;
+        border: 1.5px solid #d4d399 !important;
+        border-radius: 20px !important;
+        padding: 6px 14px !important;
+        font-size: 0.85rem !important;
+        font-weight: bold !important;
+        min-height: auto !important;
+        display: inline-flex;
+        align-items: center;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+      }
+
+      .logo-mobile {
+        height: 38px;
+        width: auto;
+        max-width: 140px;
+        object-fit: contain;
+      }
+
+      @media (min-width: 992px) {
+        #sidebar-container {
+          width: 260px !important;
+          min-width: 260px !important;
+          position: sticky;
+          top: 0;
+          height: 100vh;
+          overflow-y: auto;
+        }
+        .btn-close-sidebar {
+          display: none !important;
+        }
+      }
+
+      @media (max-width: 991.98px) {
+        #sidebar-container {
+          position: fixed !important;
+          top: 0 !important;
+          left: 0 !important;
+          width: 280px !important;
+          max-width: 82% !important;
+          height: 100vh !important;
+          z-index: 1060 !important;
+          overflow-y: auto !important;
+          background-color: #fffecd !important;
+          transform: translateX(-100%) !important;
+          transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+          box-shadow: none;
+        }
+        #sidebar-container.active-mobile {
+          transform: translateX(0) !important;
+          box-shadow: 5px 0 20px rgba(0, 0, 0, 0.3) !important;
+        }
+      }
+
+      #sidebar-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: rgba(0, 0, 0, 0.45);
+        z-index: 1055;
+        backdrop-filter: blur(2px);
+      }
+      #sidebar-overlay.active {
+        display: block;
+      }
+
+      .kardex-card {
+        background-color: #ffffff;
+        border-radius: 16px;
+        border: 1.5px solid #e2e8f0;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+      }
+
+      .table-kardex th {
+        background-color: #f8fafc;
+        color: #1e293b;
+        font-weight: 700;
+        border-top: none;
+        font-size: 0.9rem;
+      }
+
+      .table-kardex td {
+        vertical-align: middle;
+        font-size: 0.88rem;
+        color: #475569;
+      }
+
+      /* Estilo del Diploma / Certificado dentro del modal */
+      .diploma-preview-box {
+        background: #fffdf5;
+        border: 8px double #d4af37;
+        border-radius: 12px;
+        padding: 30px;
+        text-align: center;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+      }
+      .diploma-title {
+        font-family: 'Satisfy', cursive;
+        color: #b45309;
+        font-size: 2.2rem;
+      }
+      .diploma-name {
+        font-weight: 700;
+        color: #1e293b;
+        font-size: 1.4rem;
+        border-bottom: 2px solid #cbd5e1;
+        display: inline-block;
+        padding: 0 20px 5px 20px;
+        margin: 10px 0;
+      }
+
+      #toast-notificacion {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 9999;
+        min-width: 280px;
+        max-width: 360px;
+        background-color: #ffffff;
+        border-left: 5px solid #008394;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+        border-radius: 8px;
+        padding: 12px 16px;
+        display: none;
+        opacity: 0;
+        transition: opacity 0.3s ease-in-out;
+      }
+      #toast-notificacion.show {
+        display: block;
+        opacity: 1;
+      }
+    </style>
+  </head>
+  <body class="back">
+
+    <!-- TOAST NOTIFICACIÓN -->
+    <div id="toast-notificacion" class="shadow-sm">
+      <div class="d-flex align-items-center justify-content-between">
+        <div class="d-flex align-items-center">
+          <i class="fa fa-info-circle text-info fa-lg mr-2" id="toast-icon"></i>
+          <div>
+            <h6 class="mb-0 font-weight-bold" style="color: #008394; font-size: 0.9rem;">WhiteArt</h6>
+            <small class="text-dark" id="toast-mensaje" style="font-size: 0.82rem;">Notificación</small>
+          </div>
+        </div>
+        <button type="button" class="close ml-3 p-0 bg-transparent border-0" onclick="ocultarToast()" style="font-size: 1.2rem;">&times;</button>
+      </div>
+    </div>
+
+    <div id="sidebar-overlay"></div>
+
+    <header class="navbar-mobile-header d-flex justify-content-between align-items-center d-lg-none px-3 shadow-sm">
+      <button class="btn btn-menu-amarillo" type="button" id="btnToggleSidebar">
+        <i class="fa fa-bars mr-2"></i>
+        <span>Menú</span>
+      </button>
+      <img src="WhiteArt.png" class="logo-mobile" alt="WhiteArt">
+    </header>
+
+    <div class="d-flex flex-column flex-lg-row min-vh-100 pb-5">
+        
+        <!-- MENÚ LATERAL AMARILLO (INSTRUCTOR) -->
+        <aside id="sidebar-container" class="bg-primary flex-shrink-0">
+            <div class="d-flex justify-content-end p-2 d-lg-none">
+              <button type="button" class="btn text-dark border-0 bg-transparent btn-close-sidebar" id="btnCloseSidebar" style="min-height: auto; font-size: 1.2rem;">
+                <i class="fa fa-times"></i>
+              </button>
+            </div>
+
+            <div class="logo menu text-center py-2 py-lg-4">
+                <img src="WhiteArtAmarillo.png" class="img-fluid" width="130" height="130" alt="WhiteArt">
+            </div>
+            
+            <div class="menu px-3">
+                <a href="DashboardInstructor.html" class="d-block p-3 bg-bluee"><i class="icon ion-md-book mr-3 lead"></i>Cursos</a>
+                
+                <a href="mensajesInstructor.html" class="d-block p-3 bg-bluee"><i class="icon ion-md-chatbubbles mr-3 lead"></i>Mensajes</a>
+                <a href="kardexInstructor.html" class="d-block p-3 bg-bluee active"><i class="icon ion-md-school mr-3 lead"></i>Kardex</a>
+                <a href="ventas.html" class="d-block p-3 bg-bluee"><i class="icon ion-md-cash mr-3 lead"></i>Ventas</a>
+                <a href="perfilInstructor.html" class="d-block p-3 bg-bluee"><i class="icon ion-md-person mr-3 lead"></i>Perfil</a>
+                <a href="#" class="d-block p-3 bg-bluee text-danger" data-toggle="modal" data-target="#modalCerrarSesion"><i class="icon ion-md-power mr-3 lead"></i>Cerrar sesión</a>
+            </div>
+        </aside>
+
+        <!-- CONTENIDO PRINCIPAL: KARDEX Y CERTIFICADOS -->
+        <main class="flex-grow-1 p-2 p-sm-3 p-md-4">
+          <div class="container-fluid" style="max-width: 1050px;">
+            
+            <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
+              <h3 class="font-weight-bold mb-0 text-dark" style="color: #2563eb;">Kardex y Calificaciones de Alumnos</h3>
+              <span class="badge badge-success px-3 py-2 font-weight-bold" style="font-size: 0.85rem;">
+                <i class="fa fa-check-circle mr-1"></i> Generación automática de diplomas habilitada
+              </span>
+            </div>
+
+            <p class="text-muted small mb-4">
+              Visualiza el historial académico de los estudiantes que han completado satisfactoriamente los niveles de tus cursos y emite sus certificados oficiales.
+            </p>
+
+            <!-- TABLA DE ALUMNOS EGRESADOS / CALIFICADOS -->
+            <div class="kardex-card p-4 mb-4">
+              <div class="table-responsive">
+                <table class="table table-hover table-kardex">
+                  <thead>
+                    <tr>
+                      <th>Estudiante</th>
+                      <th>Nombre Completo</th>
+                      <th>Curso Completado</th>
+                      <th>Calificación</th>
+                      <th>Fecha Terminación</th>
+                      <th>Certificado</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>@anne13</strong></td>
+                      <td>Anne Jimenez Ramirez</td>
+                      <td>Curso 1: Animación 2D</td>
+                      <td><span class="badge badge-success px-2 py-1 font-weight-bold">95 (Excelente)</span></td>
+                      <td>18 Sep 2026</td>
+                      <td>
+                        <button class="btn btn-sm btn-primary rounded-pill px-3 font-weight-bold shadow-sm" style="font-size: 0.78rem; min-height: auto;" onclick="abrirDiploma('Anne Jimenez Ramirez', 'Curso 1: Animación 2D', '18 Sep 2026', '95')">
+                          <i class="fa fa-certificate mr-1"></i> Generar Diploma
+                        </button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><strong>@carlos_m</strong></td>
+                      <td>Carlos Mendoza Ruiz</td>
+                      <td>Curso 2: Animación 3D</td>
+                      <td><span class="badge badge-success px-2 py-1 font-weight-bold">90 (Sobresaliente)</span></td>
+                      <td>19 Sep 2026</td>
+                      <td>
+                        <button class="btn btn-sm btn-primary rounded-pill px-3 font-weight-bold shadow-sm" style="font-size: 0.78rem; min-height: auto;" onclick="abrirDiploma('Carlos Mendoza Ruiz', 'Curso 2: Animación 3D', '19 Sep 2026', '90')">
+                          <i class="fa fa-certificate mr-1"></i> Generar Diploma
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+          </div>
+        </main>
+        
+    </div>
+
+    <!-- MODAL DE VISTA PREVIA Y GENERACIÓN DE DIPLOMA -->
+    <div class="modal fade" id="modalDiploma" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content border-0 shadow-lg rounded">
+          <div class="modal-header py-3 px-4 border-bottom">
+            <h5 class="modal-title font-weight-bold text-primary mb-0" style="font-size: 1.15rem;">
+              <i class="fa fa-award text-warning mr-2"></i>Certificado de Terminación Oficial
+            </h5>
+            <button type="button" class="close text-muted border-0 bg-transparent p-0 m-0" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body p-4">
+            
+            <!-- MAQUETA DEL DIPLOMA -->
+            <div class="diploma-preview-box">
+              <h4 class="text-uppercase font-weight-bold text-secondary mb-1" style="letter-spacing: 2px; font-size: 0.9rem;">WhiteArt - Academia Creativa</h4>
+              <h2 class="diploma-title my-2">Certificado de Aprobación</h2>
+              <p class="text-muted small mb-3">Se otorga el presente reconocimiento a:</p>
+              
+              <div class="diploma-name" id="diplomaAlumno">Nombre del Alumno</div>
+              
+              <p class="text-muted small mt-3 mb-1">Por haber concluido satisfactoriamente todos los niveles del curso:</p>
+              <h5 class="font-weight-bold text-dark mb-3" id="diplomaCurso">Nombre del Curso</h5>
+              
+              <div class="row justify-content-center align-items-center mt-4">
+                <div class="col-6 text-center">
+                  <small class="text-muted d-block">Fecha de Terminación</small>
+                  <strong class="text-dark" id="diplomaFecha">00/00/0000</strong>
+                </div>
+                <div class="col-6 text-center">
+                  <small class="text-muted d-block">Certificado por</small>
+                  <strong class="text-primary">Mtro. Mateo Morales Cantú</strong>
+                  <div style="font-family: 'Satisfy', cursive; font-size: 1.2rem; color: #1e3a8a;">Mateo Morales C.</div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <div class="modal-footer py-3 px-4 border-top bg-light justify-content-center">
+            <button type="button" class="btn btn-secondary rounded-pill px-4" data-dismiss="modal">Cerrar</button>
+            <button type="button" class="btn btn-success rounded-pill px-4 font-weight-bold shadow-sm" onclick="descargarDiploma()">
+              <i class="fa fa-download mr-1"></i> Descargar y Enviar al Alumno
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL CERRAR SESIÓN -->
+    <div class="modal fade" id="modalCerrarSesion" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content border-0 shadow-lg rounded" style="background-color: #ffffff !important; overflow: hidden;">
+          <div class="modal-header py-3 px-4 border-bottom d-flex align-items-center justify-content-between" style="background-color: #ffffff !important;">
+            <h5 class="modal-title font-weight-bold text-danger mb-0" style="font-size: 1.15rem;">
+              <icon class="icon ion-md-power mr-2"></icon>Cerrar Sesión
+            </h5>
+            <button type="button" class="close text-muted border-0 bg-transparent p-0 m-0" data-dismiss="modal" aria-label="Close" style="font-size: 1.4rem; line-height: 1; outline: none;">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body p-4 text-center" style="background-color: #ffffff !important;">
+            <p class="mb-2 text-dark" style="font-size: 0.95rem;">¿Estás segur@ de que deseas cerrar sesión en <strong>WhiteArt</strong>?</p>
+            <small class="text-muted d-block">Tendrás que ingresar nuevamente para acceder a tu tablero.</small>
+          </div>
+          <div class="modal-footer py-3 px-4 border-top bg-light justify-content-center">
+            <button type="button" class="btn btn-secondary rounded-pill px-4" data-dismiss="modal" style="min-height: auto; font-size: 0.88rem;">Cancelar</button>
+            <a href="index.html" class="btn btn-danger rounded-pill px-4" style="min-height: auto; font-size: 0.88rem; line-height: 1.8;">Sí, cerrar sesión</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer class="py-1 mt-4" style="background-color: #fffecdd9;">
+        <div class="text-center">
+            <small>&copy; 2026 <b>WhiteArt</b> - Todos los Derechos Reservados.</small>
+        </div>
+    </footer>
+
+    <script>
+      const sidebar = document.getElementById('sidebar-container');
+      const overlay = document.getElementById('sidebar-overlay');
+      const btnToggle = document.getElementById('btnToggleSidebar');
+      const btnClose = document.getElementById('btnCloseSidebar');
+
+      function abrirMenu() {
+        sidebar.classList.add('active-mobile');
+        overlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function cerrarMenu() {
+        sidebar.classList.remove('active-mobile');
+        overlay.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+
+      if (btnToggle) btnToggle.addEventListener('click', abrirMenu);
+      if (btnClose) btnClose.addEventListener('click', cerrarMenu);
+      if (overlay) overlay.addEventListener('click', cerrarMenu);
+
+      // Función para abrir y rellenar la maqueta del diploma automáticamente
+      function abrirDiploma(nombreAlumno, nombreCurso, fecha, calificacion) {
+        document.getElementById('diplomaAlumno').innerText = nombreAlumno;
+        document.getElementById('diplomaCurso').innerText = nombreCurso;
+        document.getElementById('diplomaFecha').innerText = fecha;
+        
+        $('#modalDiploma').modal('show');
+        mostrarToast(`Generando certificado para ${nombreAlumno}...`, 'info');
+      }
+
+      function descargarDiploma() {
+        $('#modalDiploma').modal('hide');
+        mostrarToast('¡Diploma generado y enviado exitosamente al estudiante!', 'success');
+      }
+
+      let toastTimer;
+      function mostrarToast(mensaje, tipo = 'info') {
+        const toast = document.getElementById('toast-notificacion');
+        const spanMensaje = document.getElementById('toast-mensaje');
+        const icon = document.getElementById('toast-icon');
+        
+        spanMensaje.innerText = mensaje;
+        if (tipo === 'success') {
+          icon.className = 'fa fa-check-circle text-success fa-lg mr-2';
+        } else {
+          icon.className = 'fa fa-info-circle text-info fa-lg mr-2';
+        }
+        
+        toast.classList.add('show');
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => {
+          ocultarToast();
+        }, 3500);
+      }
+
+      function ocultarToast() {
+        const toast = document.getElementById('toast-notificacion');
+        toast.classList.remove('show');
+      }
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  </body>
+</html>

@@ -1,127 +1,498 @@
 <!doctype html>
-<html lang="en">
+<html lang="es">
   <head>
-    <!-- Required meta tags -->
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300&family=Satisfy&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;500;700&family=Satisfy&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://unpkg.com/ionicons@4.5.10-0/dist/css/ionicons.min.css" rel="stylesheet">
 
-
+    <link rel="stylesheet" href="menu.css">
+    <link rel="stylesheet" href="perfil.css">
+    <link rel="stylesheet" href="tablero.css">
     <link rel="stylesheet" href="style.css">
-    <title>CompARTE/Editar Perfil</title>
+
+    <title>WhiteArt / Editar Perfil</title>
+
+    <style>
+      body {
+        overflow-x: hidden;
+        margin: 0;
+        padding: 0;
+      }
+
+      /* Barra superior móvil */
+      .navbar-mobile-header {
+        background-color: #ffffff !important;
+        border-bottom: 2px solid #fffecd;
+        height: 62px;
+        position: sticky;
+        top: 0;
+        z-index: 1045;
+      }
+
+      .btn-menu-amarillo {
+        background-color: #fffecd !important;
+        color: #008394 !important;
+        border: 1.5px solid #d4d399 !important;
+        border-radius: 20px !important;
+        padding: 6px 14px !important;
+        font-size: 0.85rem !important;
+        font-weight: bold !important;
+        min-height: auto !important;
+        display: inline-flex;
+        align-items: center;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+      }
+
+      .logo-mobile {
+        height: 38px;
+        width: auto;
+        max-width: 140px;
+        object-fit: contain;
+      }
+
+      /* Sidebar adaptable */
+      @media (min-width: 992px) {
+        #sidebar-container {
+          width: 260px !important;
+          min-width: 260px !important;
+          position: sticky;
+          top: 0;
+          height: 100vh;
+          overflow-y: auto;
+        }
+        .btn-close-sidebar {
+          display: none !important;
+        }
+      }
+
+      @media (max-width: 991.98px) {
+        #sidebar-container {
+          position: fixed !important;
+          top: 0 !important;
+          left: 0 !important;
+          width: 280px !important;
+          max-width: 82% !important;
+          height: 100vh !important;
+          z-index: 1060 !important;
+          overflow-y: auto !important;
+          background-color: #fffecd !important;
+          transform: translateX(-100%) !important;
+          transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+          box-shadow: none;
+        }
+
+        #sidebar-container.active-mobile {
+          transform: translateX(0) !important;
+          box-shadow: 5px 0 20px rgba(0, 0, 0, 0.3) !important;
+        }
+
+        .container {
+          padding-left: 12px !important;
+          padding-right: 12px !important;
+          max-width: 100% !important;
+        }
+      }
+
+      #sidebar-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: rgba(0, 0, 0, 0.45);
+        z-index: 1055;
+        backdrop-filter: blur(2px);
+      }
+      #sidebar-overlay.active {
+        display: block;
+      }
+
+      /* Avatar y botón flotante con camara.png */
+      .avatar-edit-wrapper {
+        position: relative;
+        width: 130px;
+        height: 130px;
+        margin: 0 auto;
+      }
+
+      .avatar-edit-preview {
+        width: 130px;
+        height: 130px;
+        border-radius: 50%;
+        border: 4px solid #ffffff;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+        object-fit: cover;
+      }
+
+      .btn-camera-upload {
+        position: absolute;
+        bottom: 2px;
+        right: 2px;
+        background-color: #fffecd;
+        border: 2px solid #ffffff;
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+        transition: transform 0.15s ease, background-color 0.2s ease;
+      }
+      .btn-camera-upload:hover {
+        transform: scale(1.08);
+        background-color: #fffac2;
+      }
+
+      .btn-camera-upload img {
+        width: 24px;
+        height: 24px;
+        object-fit: contain;
+      }
+
+      /* Inputs con diseño WhiteArt */
+      .form-control-custom {
+        background-color: #fffecdd9 !important;
+        color: #212529 !important;
+        border: 1px solid #e0dfa3 !important;
+        border-radius: 8px;
+        font-size: 0.92rem;
+      }
+      .form-control-custom:focus {
+        background-color: #ffffff !important;
+        box-shadow: 0 0 0 0.2rem rgba(0, 131, 148, 0.2);
+      }
+
+      /* Ojito para mostrar/ocultar contraseña */
+      .password-container {
+        position: relative;
+        display: flex;
+        align-items: center;
+      }
+      .password-container input {
+        padding-right: 42px;
+      }
+      .toggle-password {
+        position: absolute;
+        right: 14px;
+        cursor: pointer;
+        color: #6c757d;
+        z-index: 10;
+        font-size: 1.1rem;
+        transition: color 0.2s ease;
+      }
+      .toggle-password:hover {
+        color: #008394;
+      }
+    </style>
   </head>
-  <body class="bg-blue">
-    
-    <section>
-        <div class="row g-0">
-            <div class="col-lg-7 ">
+  <body class="back">
 
-                <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
-                    <div class="carousel-indicators">
-                      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-                      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
-                      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
-                    </div>
-                    <div class="carousel-inner">
-                      <div class="carousel-item active">
-                        <img src="4.jpg" class="d-block w-100  " alt="...">
-                      </div>
-                      <div class="carousel-item">
-                        <img src="5.jpg" class="d-block w-100" alt="...">
-                      </div>
-                      <div class="carousel-item">
-                        <img src="6.jpg" class="d-block w-100" alt="...">
-                      </div>
-                    </div>
-                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
-                      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                      <span class="visually-hidden">Previous</span>
-                    </button>
-                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
-                      <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                      <span class="visually-hidden">Next</span>
-                    </button>
-                  </div>
+    <!-- OVERLAY EN MÓVIL -->
+    <div id="sidebar-overlay"></div>
 
+    <!-- HEADER MÓVIL -->
+    <header class="navbar-mobile-header d-flex justify-content-between align-items-center d-lg-none px-3 shadow-sm">
+      <button class="btn btn-menu-amarillo" type="button" id="btnToggleSidebar">
+        <i class="fa fa-bars mr-2"></i>
+        <span>Menú</span>
+      </button>
+      <img src="WhiteArt.png" class="logo-mobile" alt="WhiteArt">
+    </header>
 
+    <div class="d-flex flex-column flex-lg-row min-vh-100 pb-5">
 
+        <!-- SIDEBAR / MENÚ LATERAL -->
+        <aside id="sidebar-container" class="bg-primary flex-shrink-0">
+            <div class="d-flex justify-content-end p-2 d-lg-none">
+              <button type="button" class="btn text-dark border-0 bg-transparent btn-close-sidebar" id="btnCloseSidebar" style="min-height: auto; font-size: 1.2rem;">
+                <i class="fa fa-times"></i>
+              </button>
+            </div>
 
+            <div class="logo menu text-center py-2 py-lg-4">
+                <img src="WhiteArtAmarillo.png" class="img-fluid" width="130" height="130" alt="WhiteArt">
+            </div>
+            
+            <div class="menu px-3">
+                <a href="Dashboard.html" class="d-block p-3 bg-bluee"><i class="icon ion-md-book mr-3 lead"></i>Cursos</a>
+                <a href="busqueda.html" class="d-block p-3 bg-bluee"><i class="icon ion-md-compass mr-3 lead"></i>Búsqueda</a>
+                <a href="mensajes.html" class="d-block p-3 bg-bluee"><i class="icon ion-md-chatbubbles mr-3 lead"></i>Mensajes</a>
+                <a href="kardex.html" class="d-block p-3 bg-bluee"><i class="icon ion-md-school mr-3 lead"></i>Kardex</a>
+                <a href="perfil.html" class="d-block p-3 bg-bluee active"><i class="icon ion-md-person mr-3 lead"></i>Perfil</a>
+                <a href="#" class="d-block p-3 bg-bluee text-danger" data-toggle="modal" data-target="#modalCerrarSesion"><i class="icon ion-md-power mr-3 lead"></i>Cerrar sesión</a>
+            </div>
+        </aside>
 
+        <!-- ÁREA PRINCIPAL -->
+        <main class="flex-grow-1 p-2 p-sm-3 p-md-4">
+            <div class="container my-3 my-lg-4" style="max-width: 820px;">
+               
+               <div class="card border-0 shadow-sm rounded overflow-hidden bg-white">
+                   
+                   <!-- Cabecera -->
+                   <div class="card-header bg-white py-3 px-4 border-bottom d-flex justify-content-between align-items-center">
+                       <div>
+                           <h4 class="mb-0 font-weight-bold" style="color: #008394;">Editar Perfil</h4>
+                           <small class="text-muted">Actualiza tu información personal y foto de usuario</small>
+                       </div>
+                       <a href="perfil.html" class="btn btn-sm btn-outline-secondary rounded-pill px-3" style="min-height: auto;">
+                           <i class="fa fa-arrow-left mr-1"></i> Volver
+                       </a>
+                   </div>
 
+                   <!-- Formulario -->
+                   <form id="formEditarPerfil" class="card-body p-4 text-dark">
 
+                       <!-- Avatar -->
+                       <div class="text-center mb-4 pb-2 border-bottom">
+                           <div class="avatar-edit-wrapper">
+                               <img src="anne.jpg" id="previewAvatar" class="avatar-edit-preview" alt="Foto de perfil">
+                               <label for="inputAvatar" class="btn-camera-upload" title="Cambiar foto de perfil">
+                                   <img src="camara.png" alt="Cámara">
+                               </label>
+                               <input type="file" id="inputAvatar" accept="image/*" style="display: none;" onchange="actualizarPrevisualizacionAvatar(this)">
+                           </div>
+                           <small class="text-muted d-block mt-2 font-weight-bold">Haz clic en la cámara para subir una nueva foto <span class="text-danger">(máx. 5 MB)</span></small>
+                       </div>
 
+                       <!-- Datos Generales -->
+                       <div class="row">
+                           <div class="col-12 col-md-6 mb-3">
+                               <label class="font-weight-bold mb-1">Nombre Completo <span class="text-danger">*</span></label>
+                               <input type="text" id="editNombreCompleto" class="form-control form-control-custom" value="Anne Jimenez Ramirez" required>
+                           </div>
+                           <div class="col-12 col-md-6 mb-3">
+                               <label class="font-weight-bold mb-1">Nombre de Usuario <span class="text-danger">*</span></label>
+                               <input type="text" id="editUsername" class="form-control form-control-custom" value="ANNE13" required>
+                           </div>
+                       </div>
+
+                       <div class="row">
+                           <div class="col-12 col-md-6 mb-3">
+                               <label class="font-weight-bold mb-1">Correo Electrónico <span class="text-danger">*</span></label>
+                               <input type="email" id="editEmail" class="form-control form-control-custom" value="Anne13jmz@hotmail.com" required>
+                           </div>
+                           <div class="col-12 col-md-6 mb-3">
+                               <label class="font-weight-bold mb-1">Edad o Fecha de Nacimiento</label>
+                               <input type="number" id="editEdad" class="form-control form-control-custom" value="22" min="12" max="100">
+                           </div>
+                       </div>
+
+                       <!-- Biografía -->
+                       <div class="form-group mb-4">
+                           <label class="font-weight-bold mb-1">Descripción / Biografía</label>
+                           <textarea id="editBio" class="form-control form-control-custom" rows="3">Estudiante de diseño gráfico. Me gusta mucho dibujar, editar y las fresas.</textarea>
+                       </div>
+
+                       <!-- Cambio de Contraseña -->
+                       <div class="border-top pt-3 mb-4">
+                           <h6 class="font-weight-bold text-dark mb-3"><i class="fa fa-lock mr-1 text-primary"></i> Cambiar Contraseña <small class="text-muted font-weight-normal">(Opcional)</small></h6>
+                           
+                           <div class="row">
+                               <div class="col-12 col-md-6 mb-3">
+                                   <label class="font-weight-bold small mb-1">Nueva Contraseña</label>
+                                   <div class="password-container">
+                                       <input type="password" id="editNuevaPass" class="form-control form-control-custom" placeholder="mas de 8 digitos">
+                                       <i class="fa fa-eye-slash toggle-password" onclick="togglePasswordVisibility('editNuevaPass', this)"></i>
+                                   </div>
+                               </div>
+                               <div class="col-12 col-md-6 mb-3">
+                                   <label class="font-weight-bold small mb-1">Confirmar Nueva Contraseña</label>
+                                   <div class="password-container">
+                                       <input type="password" id="editConfirmPass" class="form-control form-control-custom" placeholder="Repite la nueva">
+                                       <i class="fa fa-eye-slash toggle-password" onclick="togglePasswordVisibility('editConfirmPass', this)"></i>
+                                   </div>
+                               </div>
+                           </div>
+                       </div>
+
+                       <!-- Botones de Acción -->
+                       <div class="d-flex justify-content-end border-top pt-3">
+                           <a href="perfil.html" class="btn btn-secondary rounded-pill px-4 mr-2" style="min-height: auto;">
+                               Cancelar
+                           </a>
+                           <button type="submit" class="btn btn-primary bg-bluey border-0 rounded-pill px-4 shadow-sm" style="min-height: auto;">
+                               <i class="fa fa-check mr-1"></i> Guardar Cambios
+                           </button>
+                       </div>
+
+                   </form>
+
+               </div>
 
             </div>
-            <div class="col-lg-5 d-flex flex-column align-items-end min-vh-100">
-                <div class="px-lg-5 pt-lg-4 pb-lg-3 p-4 w-100 mb-auto ">
-                <img src="compARTE.png" class="img-fluid" width="150" height="150">
-                </div>
-                <div class="px-lg-5 py-lg-4 p-4 w-100 mb-auto ">
-                    <h1 style="text-align: center;">¡EMPIEZA A EDITAR!</h1>
-                    <form >
+        </main>
 
-                    <div class="form-row mb-3 ">
-                        <div class="form-group col-md-6">
-                            <label class="font-weight-bold">
-                                Nombre<span class="text-danger">*</span>
-                            <input type="text" class="form-control bg-bluex border-0" placeholder="Tu nombre">
-                        </div>
-                        <div class="form-group col-md-6">
-                            <label class="font-weight-bold">
-                                Apellido<span class="text-danger">*</span>
-                            <input type="text" class="form-control bg-bluex border-0" placeholder="Tu apellido">
-                        </div>
-                        <div class="form-group col-md-6">
-                            <label class="font-weight-bold">
-                                Fecha de nacimiento<span class="text-danger">*</span>
-                            <input type="date" class="form-control bg-bluex border-0">
-                        </div>
-                        <div class="form-group col-md-6">
-                            <label class="font-weight-bold">
-                               Correo electrónico<span class="text-danger">*</span>
-                            <input type="email" class="form-control bg-bluex border-0" placeholder="Tu correo electrónico">
-                        </div>
-                       
-                        <div class="form-group col-md-6">
-                            <label class="font-weight-bold">
-                              Contraseña<span class="text-danger">*</span>
-                            <input type="password" class="form-control bg-bluex border-0" placeholder="Tu contraseña">
-                            <p></p>
-                            <button type="submit" class="btn btn-primary  bg-bluey border-0 md-2 py-lg-4">Registrar</button>
-                        </div>
-                        
-                        
-                        
+        <!-- FOOTER -->
+        <footer class="fixed-bottom py-1" style="background-color: #fffecdd9; z-index: 1020;">
+            <div class="text-center">
+                <small>&copy; 2026 <b>WhiteArt</b> - Todos los derechos reservados.</small>
+            </div>
+        </footer>
 
-                        
-                    </div>
+    </div>
 
-
-
-                    </form>
-
-                    
-                 </div>
-                 
-             </div>
-
+    <!-- MODAL DE ÉXITO -->
+    <div class="modal fade" id="modalExitoPerfil" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content border-0 shadow-lg rounded" style="background-color: #ffffff; overflow: hidden;">
+          <div class="modal-header py-3 px-4 border-bottom d-flex align-items-center justify-content-between">
+            <h5 class="modal-title font-weight-bold mb-0" style="color: #008394; font-size: 1.15rem;">
+              <i class="fa fa-check-circle mr-2 text-success"></i>WhiteArt
+            </h5>
+            <button type="button" class="close text-muted border-0 bg-transparent p-0 m-0" data-dismiss="modal" aria-label="Close" style="font-size: 1.4rem; line-height: 1;">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body p-4 text-center">
+            <p class="mb-1 text-dark" style="font-size: 1rem; font-weight: 500;">
+              ¡Perfil actualizado con éxito!
+            </p>
+            <small class="text-muted">Los cambios y la foto de perfil se han guardado correctamente.</small>
+          </div>
+          <div class="modal-footer py-2 justify-content-center bg-light">
+            <button type="button" class="btn btn-primary bg-bluey border-0 rounded-pill px-4" id="btnAceptarExito" style="min-height: auto;">
+              Aceptar
+            </button>
+          </div>
         </div>
-    </section>
+      </div>
+    </div>
 
-    <!-- Optional JavaScript; choose one of the two! -->
+    <!-- MODAL ERROR CONTRASEÑAS -->
+    <div class="modal fade" id="modalErrorPass" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content border-0 shadow-lg rounded" style="background-color: #ffffff; overflow: hidden;">
+          <div class="modal-header py-3 px-4 border-bottom d-flex align-items-center justify-content-between">
+            <h5 class="modal-title font-weight-bold mb-0 text-danger" style="font-size: 1.15rem;">
+              <i class="fa fa-exclamation-triangle mr-2"></i>WhiteArt
+            </h5>
+            <button type="button" class="close text-muted border-0 bg-transparent p-0 m-0" data-dismiss="modal" aria-label="Close" style="font-size: 1.4rem; line-height: 1;">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body p-4 text-center">
+            <p class="mb-1 text-dark" style="font-size: 1rem; font-weight: 500;">
+              Las contraseñas no coinciden
+            </p>
+            <small class="text-muted">Por favor verifica que la nueva contraseña y su confirmación sean iguales.</small>
+          </div>
+          <div class="modal-footer py-2 justify-content-center bg-light">
+            <button type="button" class="btn btn-secondary rounded-pill px-4" data-dismiss="modal" style="min-height: auto;">
+              Entendido
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
 
-    <!-- Option 1: Bootstrap Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <!-- MODAL CERRAR SESIÓN -->
+    <div class="modal fade" id="modalCerrarSesion" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content border-0 shadow-lg rounded" style="background-color: #ffffff !important; overflow: hidden;">
+          <div class="modal-header py-3 px-4 border-bottom d-flex align-items-center justify-content-between" style="background-color: #ffffff !important;">
+            <h5 class="modal-title font-weight-bold text-danger mb-0" style="font-size: 1.15rem;">
+              <i class="icon ion-md-power mr-2"></i>Cerrar Sesión
+            </h5>
+            <button type="button" class="close text-muted border-0 bg-transparent p-0 m-0" data-dismiss="modal" aria-label="Close" style="font-size: 1.4rem; line-height: 1; outline: none;">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body p-4 text-center" style="background-color: #ffffff !important;">
+            <p class="mb-2 text-dark" style="font-size: 0.95rem;">¿Estás segur@ de que deseas cerrar sesión en <strong>WhiteArt</strong>?</p>
+            <small class="text-muted d-block">Tendrás que ingresar nuevamente para acceder a tu tablero.</small>
+          </div>
+          <div class="modal-footer py-3 px-4 border-top bg-light justify-content-center">
+            <button type="button" class="btn btn-secondary rounded-pill px-4" data-dismiss="modal" style="min-height: auto; font-size: 0.88rem;">Cancelar</button>
+            <a href="index.html" class="btn btn-danger rounded-pill px-4" style="min-height: auto; font-size: 0.88rem; line-height: 1.8;">Sí, cerrar sesión</a>
+          </div>
+        </div>
+      </div>
+    </div>
 
-    <!-- Option 2: Separate Popper and Bootstrap JS -->
-    <!--
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
-    -->
+    <!-- SCRIPTS -->
+    <script>
+      const sidebar = document.getElementById('sidebar-container');
+      const overlay = document.getElementById('sidebar-overlay');
+      const btnToggle = document.getElementById('btnToggleSidebar');
+      const btnClose = document.getElementById('btnCloseSidebar');
+
+      function abrirMenu() {
+        sidebar.classList.add('active-mobile');
+        overlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function cerrarMenu() {
+        sidebar.classList.remove('active-mobile');
+        overlay.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+
+      if (btnToggle) btnToggle.addEventListener('click', abrirMenu);
+      if (btnClose) btnClose.addEventListener('click', cerrarMenu);
+      if (overlay) overlay.addEventListener('click', cerrarMenu);
+
+      function actualizarPrevisualizacionAvatar(input) {
+        if (input.files && input.files[0]) {
+          if (input.files[0].size > 5 * 1024 * 1024) {
+            alert('La nueva foto de perfil no debe superar los 5 MB.');
+            input.value = '';
+            return;
+          }
+          const reader = new FileReader();
+          reader.onload = function(e) {
+            document.getElementById('previewAvatar').src = e.target.result;
+          };
+          reader.readAsDataURL(input.files[0]);
+        }
+      }
+
+      function togglePasswordVisibility(fieldId, iconElement) {
+        const inputField = document.getElementById(fieldId);
+        if (inputField.type === "password") {
+          inputField.type = "text";
+          iconElement.classList.remove("fa-eye-slash");
+          iconElement.classList.add("fa-eye");
+        } else {
+          inputField.type = "password";
+          iconElement.classList.remove("fa-eye");
+          iconElement.classList.add("fa-eye-slash");
+        }
+      }
+
+      document.getElementById('formEditarPerfil').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const pass = document.getElementById('editNuevaPass').value;
+        const confirmPass = document.getElementById('editConfirmPass').value;
+
+        if (pass !== '' && pass !== confirmPass) {
+          $('#modalErrorPass').modal('show');
+          return;
+        }
+
+        $('#modalExitoPerfil').modal('show');
+      });
+
+      document.getElementById('btnAceptarExito').addEventListener('click', function() {
+        $('#modalExitoPerfil').modal('hide');
+        window.location.href = 'perfil.html';
+      });
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
   </body>
 </html>

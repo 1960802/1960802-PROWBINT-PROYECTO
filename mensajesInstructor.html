@@ -1,0 +1,595 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;500;700&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/ffec4ec2ed.js" crossorigin="anonymous"></script>
+    <link href="https://unpkg.com/ionicons@4.5.10-0/dist/css/ionicons.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="menu.css">
+    <link rel="stylesheet" href="tablero.css">
+    <link rel="stylesheet" href="style.css">
+    <title>WhiteArt - Mensajes del Instructor</title>
+
+    <style>
+      body {
+        overflow-x: hidden;
+        margin: 0;
+        padding: 0;
+        font-family: 'Comfortaa', cursive, sans-serif;
+      }
+
+      .navbar-mobile-header {
+        background-color: #ffffff !important;
+        border-bottom: 2px solid #fffecd;
+        height: 62px;
+        position: sticky;
+        top: 0;
+        z-index: 1045;
+      }
+
+      .btn-menu-amarillo {
+        background-color: #fffecd !important;
+        color: #008394 !important;
+        border: 1.5px solid #d4d399 !important;
+        border-radius: 20px !important;
+        padding: 6px 14px !important;
+        font-size: 0.85rem !important;
+        font-weight: bold !important;
+        min-height: auto !important;
+        display: inline-flex;
+        align-items: center;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+      }
+
+      .logo-mobile {
+        height: 38px;
+        width: auto;
+        max-width: 140px;
+        object-fit: contain;
+      }
+
+      @media (min-width: 992px) {
+        #sidebar-container {
+          width: 260px !important;
+          min-width: 260px !important;
+          position: sticky;
+          top: 0;
+          height: 100vh;
+          overflow-y: auto;
+        }
+        .btn-close-sidebar {
+          display: none !important;
+        }
+      }
+
+      @media (max-width: 991.98px) {
+        #sidebar-container {
+          position: fixed !important;
+          top: 0 !important;
+          left: 0 !important;
+          width: 280px !important;
+          max-width: 82% !important;
+          height: 100vh !important;
+          z-index: 1060 !important;
+          overflow-y: auto !important;
+          background-color: #fffecd !important;
+          transform: translateX(-100%) !important;
+          transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+          box-shadow: none;
+        }
+        #sidebar-container.active-mobile {
+          transform: translateX(0) !important;
+          box-shadow: 5px 0 20px rgba(0, 0, 0, 0.3) !important;
+        }
+      }
+
+      #sidebar-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: rgba(0, 0, 0, 0.45);
+        z-index: 1055;
+        backdrop-filter: blur(2px);
+      }
+      #sidebar-overlay.active {
+        display: block;
+      }
+
+      /* Estilo contenedor general del chat dual */
+      .instructor-chat-layout {
+        background: #ffffff;
+        border-radius: 24px;
+        border: 1.5px solid #e2e8f0;
+        overflow: hidden;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+      }
+
+      /* Panel izquierdo: Conversación activa */
+      .chat-main-panel {
+        display: flex;
+        flex-direction: column;
+        height: 540px;
+        border-right: 1.5px solid #e2e8f0;
+      }
+
+      .chat-header {
+        background-color: #2563eb;
+        color: white;
+        padding: 15px 20px;
+        display: flex;
+        align-items: center;
+      }
+      .chat-header-avatar {
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid white;
+      }
+
+      .chat-body {
+        padding: 20px;
+        flex-grow: 1;
+        overflow-y: auto;
+        background-color: #ffffff;
+      }
+
+      /* Burbujas de mensajes para el instructor */
+      .message-bubble {
+        max-width: 78%;
+        padding: 12px 16px;
+        border-radius: 18px;
+        font-size: 0.85rem;
+        margin-bottom: 6px;
+        line-height: 1.4;
+      }
+      /* Mensajes del alumno (recibidos a la izquierda) */
+      .message-received {
+        background-color: #f1f5f9;
+        color: #1e293b;
+        border-bottom-left-radius: 4px;
+        margin-right: auto;
+        border: 1px solid #e2e8f0;
+      }
+      /* Mensajes del instructor (enviados a la derecha) */
+      .message-sent {
+        background-color: #e0e7ff;
+        color: #1e3a8a;
+        border-bottom-right-radius: 4px;
+        margin-left: auto;
+      }
+
+      .message-time {
+        font-size: 0.7rem;
+        color: #64748b;
+        margin-bottom: 12px;
+        display: block;
+      }
+      .time-left { text-align: left; }
+      .time-right { text-align: right; }
+
+      .chat-img-preview {
+        max-width: 220px;
+        border-radius: 12px;
+        margin-bottom: 5px;
+        display: block;
+      }
+
+      .chat-footer {
+        background-color: #e0e7ff;
+        padding: 12px 20px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .chat-input {
+        background: #ffffff;
+        border: none;
+        border-radius: 50rem;
+        padding: 10px 20px;
+        font-size: 0.85rem;
+        flex-grow: 1;
+        box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+      }
+      .chat-input:focus { outline: none; }
+
+      .gallery-send-btn {
+        background-color: #2563eb;
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        border: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: transform 0.2s;
+        padding: 0;
+        flex-shrink: 0;
+      }
+      .gallery-send-btn:hover { transform: scale(1.08); }
+      .gallery-send-btn img {
+        width: 22px;
+        height: 22px;
+        object-fit: contain;
+        filter: brightness(0) invert(1);
+      }
+
+      /* Panel derecho: Lista de chats de alumnos */
+      .chats-sidebar-panel {
+        background-color: #f8fafc;
+        height: 540px;
+        display: flex;
+        flex-direction: column;
+      }
+      .chats-sidebar-header {
+        padding: 15px 20px;
+        border-bottom: 1px solid #e2e8f0;
+        font-weight: bold;
+        color: #1e293b;
+        font-size: 0.95rem;
+        background-color: #f1f5f9;
+      }
+      .chats-list-container {
+        overflow-y: auto;
+        flex-grow: 1;
+        padding: 10px;
+      }
+      .chat-contact-item {
+        display: flex;
+        align-items: center;
+        padding: 12px;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: background 0.2s;
+        margin-bottom: 6px;
+        text-decoration: none !important;
+      }
+      .chat-contact-item:hover {
+        background-color: #e2e8f0;
+      }
+      .chat-contact-item.active {
+        background-color: #e0e7ff;
+        border: 1px solid #c7d2fe;
+      }
+      .contact-avatar {
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-right: 12px;
+        border: 1.5px solid #2563eb;
+      }
+
+      #toast-notificacion {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 9999;
+        min-width: 280px;
+        max-width: 360px;
+        background-color: #ffffff;
+        border-left: 5px solid #008394;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+        border-radius: 8px;
+        padding: 12px 16px;
+        display: none;
+        opacity: 0;
+        transition: opacity 0.3s ease-in-out;
+      }
+      #toast-notificacion.show {
+        display: block;
+        opacity: 1;
+      }
+    </style>
+  </head>
+  <body class="back">
+
+    <!-- TOAST NOTIFICACIÓN -->
+    <div id="toast-notificacion" class="shadow-sm">
+      <div class="d-flex align-items-center justify-content-between">
+        <div class="d-flex align-items-center">
+          <i class="fa fa-info-circle text-info fa-lg mr-2"></i>
+          <div>
+            <h6 class="mb-0 font-weight-bold" style="color: #008394; font-size: 0.9rem;">WhiteArt</h6>
+            <small class="text-dark" id="toast-mensaje" style="font-size: 0.82rem;">Notificación</small>
+          </div>
+        </div>
+        <button type="button" class="close ml-3 p-0 bg-transparent border-0" onclick="ocultarToast()" style="font-size: 1.2rem;">&times;</button>
+      </div>
+    </div>
+
+    <div id="sidebar-overlay"></div>
+
+    <header class="navbar-mobile-header d-flex justify-content-between align-items-center d-lg-none px-3 shadow-sm">
+      <button class="btn btn-menu-amarillo" type="button" id="btnToggleSidebar">
+        <i class="fa fa-bars mr-2"></i>
+        <span>Menú</span>
+      </button>
+      <img src="WhiteArt.png" class="logo-mobile" alt="WhiteArt">
+    </header>
+
+    <div class="d-flex flex-column flex-lg-row min-vh-100 pb-5">
+        
+        <!-- MENÚ LATERAL AMARILLO -->
+        <aside id="sidebar-container" class="bg-primary flex-shrink-0">
+            <div class="d-flex justify-content-end p-2 d-lg-none">
+              <button type="button" class="btn text-dark border-0 bg-transparent btn-close-sidebar" id="btnCloseSidebar" style="min-height: auto; font-size: 1.2rem;">
+                <i class="fa fa-times"></i>
+              </button>
+            </div>
+
+            <div class="logo menu text-center py-2 py-lg-4">
+                <img src="WhiteArtAmarillo.png" class="img-fluid" width="130" height="130" alt="WhiteArt">
+            </div>
+            
+            <div class="menu px-3">
+                <a href="DashboardInstructor.html" class="d-block p-3 bg-bluee"><i class="icon ion-md-book mr-3 lead"></i>Cursos</a>
+                
+                <a href="mensajesInstructor.html" class="d-block p-3 bg-bluee active"><i class="icon ion-md-chatbubbles mr-3 lead"></i>Mensajes</a>
+                <a href="kardexInstructor.html" class="d-block p-3 bg-bluee"><i class="icon ion-md-school mr-3 lead"></i>Kardex</a>
+                <a href="ventas.html" class="d-block p-3 bg-bluee"><i class="icon ion-md-cash mr-3 lead"></i>Ventas</a>
+                <a href="perfilInstructor.html" class="d-block p-3 bg-bluee"><i class="icon ion-md-person mr-3 lead"></i>Perfil</a>
+                <a href="#" class="d-block p-3 bg-bluee text-danger" data-toggle="modal" data-target="#modalCerrarSesion"><i class="icon ion-md-power mr-3 lead"></i>Cerrar sesión</a>
+            </div>
+        </aside>
+
+        <!-- CONTENIDO PRINCIPAL: BANDEJA DE MENSAJES Y CHAT -->
+        <main class="flex-grow-1 p-2 p-sm-3 p-md-4">
+          <div class="container-fluid" style="max-width: 1050px;">
+            
+            <h3 class="text-center font-weight-bold mb-4" style="color: #2563eb;">Mensajes de Alumnos</h3>
+
+            <!-- ESTRUCTURA DUAL DE CHAT -->
+            <div class="instructor-chat-layout">
+              <div class="row no-gutters">
+                
+                <!-- PANEL IZQUIERDO: CONVERSACIÓN ACTIVA CON ANNE JIMENEZ -->
+                <div class="col-12 col-lg-8 chat-main-panel">
+                  
+                  <div class="chat-header">
+                    <img src="anne.jpg" class="chat-header-avatar mr-3" alt="Anne Jimenez">
+                    <div>
+                      <h6 class="mb-0 font-weight-bold" style="font-size: 1rem;">Anne Jimenez</h6>
+                      <small style="font-size: 0.75rem; opacity: 0.85;">Estudiante • Curso Animación 2D</small>
+                    </div>
+                  </div>
+
+                  <div class="chat-body" id="cuerpoChat">
+                    
+                    <div class="message-bubble message-received">
+                      ¡Hola maestro Mateo! Tengo una duda con la lección de animación 2D. En el ejercicio del salto, ¿en qué fotograma clave me recomienda colocar el estiramiento máximo del personaje?
+                    </div>
+                    <small class="message-time time-left">16:15</small>
+
+                    <div class="message-bubble message-sent">
+                      ¡Hola Anne! Qué buena pregunta. El estiramiento máximo debes colocarlo justo en el fotograma anterior y posterior al punto más alto del salto.
+                    </div>
+                    <small class="message-time time-right">16:18</small>
+
+                    <div class="message-bubble message-sent">
+                      Te sugiero revisar también el espaciado para que la gravedad se sienta natural al caer.
+                    </div>
+                    <small class="message-time time-right">16:19</small>
+
+                    <div class="message-bubble message-received">
+                      ¡Muchas gracias maestro! Ya entendí, lo voy a aplicar en mi storyboard.
+                    </div>
+                    <small class="message-time time-left">16:22</small>
+
+                  </div>
+
+                  <div class="chat-footer">
+                    <input type="text" class="chat-input" id="inputMensaje" placeholder="Escribir respuesta..." onkeypress="manejarEnter(event)">
+                    
+                    <label class="gallery-send-btn mb-0" title="Enviar imagen desde galería" style="cursor: pointer;">
+                      <img src="galeria.png" alt="Galería">
+                      <input type="file" accept="image/*" style="display: none;" onchange="enviarImagenChat(event)">
+                    </label>
+                  </div>
+
+                </div>
+
+                <!-- PANEL DERECHO: LISTA DE OTROS ALUMNOS QUE MANDARON MENSAJE -->
+                <div class="col-12 col-lg-4 chats-sidebar-panel">
+                  <div class="chats-sidebar-header">
+                    <i class="fa fa-comments mr-2 text-primary"></i> Bandeja de Alumnos
+                  </div>
+                  
+                  <div class="chats-list-container">
+                    
+                    <!-- Chat activo: Anne Jimenez -->
+                    <div class="chat-contact-item active">
+                      <img src="anne.jpg" class="contact-avatar" alt="Anne">
+                      <div class="flex-grow-1 overflow-hidden">
+                        <div class="d-flex justify-content-between align-items-center">
+                          <h6 class="font-weight-bold mb-0 text-dark" style="font-size: 0.88rem;">Anne Jimenez</h6>
+                          <small class="text-muted" style="font-size: 0.7rem;">16:22</small>
+                        </div>
+                        <p class="text-muted small mb-0 text-truncate">¡Muchas gracias maestro! Ya entendí...</p>
+                      </div>
+                    </div>
+
+                    <!-- Alumno 2 -->
+                    <div class="chat-contact-item" onclick="mostrarToast('Abriendo chat con Carlos Mendoza...', 'info')">
+                      <img src="Carlos.jpg" class="contact-avatar" alt="Carlos">
+                      <div class="flex-grow-1 overflow-hidden">
+                        <div class="d-flex justify-content-between align-items-center">
+                          <h6 class="font-weight-bold mb-0 text-dark" style="font-size: 0.88rem;">Carlos Mendoza</h6>
+                          <small class="text-muted" style="font-size: 0.7rem;">Ayer</small>
+                        </div>
+                        <p class="text-muted small mb-0 text-truncate">Maestro, una duda sobre la tarea 3D...</p>
+                      </div>
+                    </div>
+
+                    <!-- Alumno 3 -->
+                    <div class="chat-contact-item" onclick="mostrarToast('Abriendo chat con Sofía Rangel...', 'info')">
+                      <img src="Sofia.jpg" class="contact-avatar" alt="Sofía">
+                      <div class="flex-grow-1 overflow-hidden">
+                        <div class="d-flex justify-content-between align-items-center">
+                          <h6 class="font-weight-bold mb-0 text-dark" style="font-size: 0.88rem;">Sofía Rangel</h6>
+                          <small class="text-muted" style="font-size: 0.7rem;">18 Oct</small>
+                        </div>
+                        <p class="text-muted small mb-0 text-truncate">¿Cuándo se suben las calificaciones?</p>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+        </main>
+        
+    </div>
+
+    <!-- MODAL CERRAR SESIÓN -->
+    <div class="modal fade" id="modalCerrarSesion" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content border-0 shadow-lg rounded" style="background-color: #ffffff !important; overflow: hidden;">
+          <div class="modal-header py-3 px-4 border-bottom d-flex align-items-center justify-content-between" style="background-color: #ffffff !important;">
+            <h5 class="modal-title font-weight-bold text-danger mb-0" style="font-size: 1.15rem;">
+              <icon class="icon ion-md-power mr-2"></icon>Cerrar Sesión
+            </h5>
+            <button type="button" class="close text-muted border-0 bg-transparent p-0 m-0" data-dismiss="modal" aria-label="Close" style="font-size: 1.4rem; line-height: 1; outline: none;">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body p-4 text-center" style="background-color: #ffffff !important;">
+            <p class="mb-2 text-dark" style="font-size: 0.95rem;">¿Estás segur@ de que deseas cerrar sesión en <strong>WhiteArt</strong>?</p>
+            <small class="text-muted d-block">Tendrás que ingresar nuevamente para acceder a tu tablero.</small>
+          </div>
+          <div class="modal-footer py-3 px-4 border-top bg-light justify-content-center">
+            <button type="button" class="btn btn-secondary rounded-pill px-4" data-dismiss="modal" style="min-height: auto; font-size: 0.88rem;">Cancelar</button>
+            <a href="index.html" class="btn btn-danger rounded-pill px-4" style="min-height: auto; font-size: 0.88rem; line-height: 1.8;">Sí, cerrar sesión</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer class="py-1 mt-4" style="background-color: #fffecdd9;">
+        <div class="text-center">
+            <small>&copy; 2026 <b>WhiteArt</b> - Todos los Derechos Reservados.</small>
+        </div>
+    </footer>
+
+    <script>
+      const sidebar = document.getElementById('sidebar-container');
+      const overlay = document.getElementById('sidebar-overlay');
+      const btnToggle = document.getElementById('btnToggleSidebar');
+      const btnClose = document.getElementById('btnCloseSidebar');
+
+      function abrirMenu() {
+        sidebar.classList.add('active-mobile');
+        overlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function cerrarMenu() {
+        sidebar.classList.remove('active-mobile');
+        overlay.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+
+      if (btnToggle) btnToggle.addEventListener('click', abrirMenu);
+      if (btnClose) btnClose.addEventListener('click', cerrarMenu);
+      if (overlay) overlay.addEventListener('click', cerrarMenu);
+
+      // Función para enviar respuesta del instructor
+      function enviarMensajeChat() {
+        const input = document.getElementById('inputMensaje');
+        const texto = input.value.trim();
+        if (texto !== '') {
+          const cuerpoChat = document.getElementById('cuerpoChat');
+          
+          const nuevoMensaje = document.createElement('div');
+          nuevoMensaje.className = 'message-bubble message-sent';
+          nuevoMensaje.innerText = texto;
+          
+          const hora = document.createElement('small');
+          hora.className = 'message-time time-right';
+          hora.innerText = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+          cuerpoChat.appendChild(nuevoMensaje);
+          cuerpoChat.appendChild(hora);
+          
+          input.value = '';
+          cuerpoChat.scrollTop = cuerpoChat.scrollHeight;
+        }
+      }
+
+      // Función para enviar imagen desde galería
+      function enviarImagenChat(event) {
+        const archivo = event.target.files[0];
+        if (archivo) {
+          const lector = new FileReader();
+          lector.onload = function(e) {
+            const cuerpoChat = document.getElementById('cuerpoChat');
+
+            const contenedorImg = document.createElement('div');
+            contenedorImg.className = 'message-bubble message-sent p-2';
+            contenedorImg.innerHTML = `<img src="${e.target.result}" class="chat-img-preview" alt="Imagen enviada">`;
+
+            const hora = document.createElement('small');
+            hora.className = 'message-time time-right';
+            hora.innerText = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+            cuerpoChat.appendChild(contenedorImg);
+            cuerpoChat.appendChild(hora);
+
+            cuerpoChat.scrollTop = cuerpoChat.scrollHeight;
+            mostrarToast('Imagen enviada al alumno', 'success');
+          }
+          lector.readAsDataURL(archivo);
+        }
+      }
+
+      function manejarEnter(event) {
+        if (event.key === 'Enter') {
+          enviarMensajeChat();
+        }
+      }
+
+      let toastTimer;
+      function mostrarToast(mensaje, tipo = 'info') {
+        const toast = document.getElementById('toast-notificacion');
+        const spanMensaje = document.getElementById('toast-mensaje');
+        const icon = document.getElementById('toast-icon');
+        
+        spanMensaje.innerText = mensaje;
+        if (tipo === 'success') {
+          icon.className = 'fa fa-check-circle text-success fa-lg mr-2';
+        } else {
+          icon.className = 'fa fa-info-circle text-info fa-lg mr-2';
+        }
+        
+        toast.classList.add('show');
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => {
+          ocultarToast();
+        }, 3500);
+      }
+
+      function ocultarToast() {
+        const toast = document.getElementById('toast-notificacion');
+        toast.classList.remove('show');
+      }
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  </body>
+</html>

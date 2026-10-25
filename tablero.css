@@ -1,101 +1,113 @@
-:root{
-    --primary:#fffecdd9;
+:root {
+    --primary: #fffecdd9;
     --light: #ffffff;
-    --blue:#3c94a085;
+    --blue: #3c94a085;
     --blue-y: #008394;
-    
-    }
-
-    .bg.white{
-        background-color: var(--light) ;
-    }
-
-    .py-6{
-        padding-top: 6rem;
-        padding-bottom: 6rem;
-    }
-
-    .profile-picture{
-        background-image: url(Luffy.jpg);
-        background-size: cover;
-        width: 3rem;
-        height: 3rem;
-    }
-
-    .profile-picture2{
-        background-image: url(poesia.jpg);
-        background-size: cover;
-        width: 3rem;
-        height: 3rem;
-    }
-
-    .profile-picture3{
-        background-image: url(walker.jpg);
-        background-size: cover;
-        width: 3rem;
-        height: 3rem;
-    }
-
-    .profile-picture4{
-        background-image: url(walker.jpg);
-        background-size: cover;
-    margin-left: 220px;
-        width: 10rem;
-        height: 10rem;
-    }
-
-
-.tamaño{
-  font-size: 16px;
 }
 
-.letra{
+.bg-white {
+    background-color: var(--light) !important;
+}
+
+.py-6 {
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+}
+
+/* Fotos de perfil circulares con proporciones elásticas */
+.profile-picture {
+    background-image: url(ary.jpg);
+    background-size: cover;
+    background-position: center;
+    width: 3rem;
+    height: 3rem;
+    min-width: 3rem;
+    border-radius: 50%;
+}
+
+.profile-picture2 {
+    background-image: url(poesia.jpg);
+    background-size: cover;
+    background-position: center;
+    width: 3rem;
+    height: 3rem;
+    min-width: 3rem;
+    border-radius: 50%;
+}
+
+.profile-picture3 {
+    background-image: url(anne.jpg);
+    background-size: cover;
+    background-position: center;
+    width: 3rem;
+    height: 3rem;
+    min-width: 3rem;
+    border-radius: 50%;
+}
+
+.profile-picture4 {
+    background-image: url(anne.jpg);
+    background-size: cover;
+    background-position: center;
+    width: 8rem;
+    height: 8rem;
+    margin: 0 auto; /* Centrado natural sin margin-left fijo */
+    border-radius: 50%;
+}
+
+.tamaño {
+    font-size: 16px;
+}
+
+.letra {
     font-family: 'Satisfy', cursive;
-    font-size: 30px;
+    font-size: 1.8rem;
     color: #e8e829;
 }
 
-.back{
+/* Fondos */
+.back, .banner {
     background-image: url(fondo.png);
     background-attachment: fixed;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
 }
 
-.static{
-    position: fixed;
-}
-
-.header{
-    text-align: center;
-    height: 100px;
-    padding: 40px;
-    margin:20px;
-    padding-left: 300px;
-}
-
-.hea{
-    text-align: center;
-    height: 50px;
-    padding:10px;
-    margin:10px;
-    padding-left: 600px;
-}
-
-.top{
-    text-align: center;
-    height: 10px;
-    margin:20px;
-    padding-top: 1px;
-    padding-left: 300px;
-}
-
-
-.banner{
-    background-image: url(fondo.png);
-    background-attachment: fixed;
-}
-
-.uno{
+.uno {
     background-image: url(1.png);
-
+    background-size: cover;
 }
 
+/* Posición estática adaptativa: fixed en PC, normal en móviles */
+@media (min-width: 992px) {
+    .static {
+        position: sticky;
+        top: 80px;
+    }
+}
+
+@media (max-width: 991.98px) {
+    .static {
+        position: static;
+    }
+}
+
+/* Encabezados y márgenes limpios y responsivos (sin paddings fijos de 300px o 600px) */
+.header {
+    text-align: center;
+    padding: 20px 10px;
+    margin: 10px auto;
+}
+
+.hea {
+    text-align: center;
+    padding: 10px;
+    margin: 10px auto;
+}
+
+.top {
+    text-align: center;
+    padding-top: 1px;
+    margin: 10px auto;
+}
